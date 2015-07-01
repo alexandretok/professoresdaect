@@ -1,0 +1,82 @@
+/*
+Theme Name: EzyReader
+Author: Siddharth Pauhal
+Author URI: https://twitter.com/sidpauhal
+
+Css styling for the navigation menu
+*/
+.nav{background-color: #000000; border-bottom: 2px solid #118D78;
+    float: left; width: 100%;
+}
+
+.nav ul{z-index:100;	/* margin: 0; */
+	list-style-type:none; margin:0; padding:0;
+}
+
+/*Top level list items*/
+.nav ul li{position: relative; display: inline; float:left;}
+
+/*Top level menu link items style*/
+.nav ul li a{
+color: #FFFFFF;cursor: pointer; float:left; display:inline; padding: 15px; text-align: center;text-decoration: none;
+position:relative !important;
+}
+
+.nav ul li.current-menu-item{background:#118d78}
+.nav ul li.current-menu-parent{background:#118d78}
+
+
+
+* html .nav ul li a{ /*IE6 hack to get sub menu links to behave correctly*/
+display: inline-block; }
+
+.nav ul li a:link, .nav ul li a:visited{
+color:#fff; }
+
+.nav ul li a.selected{ /*CSS class that's dynamically added to the currently active menu items' LI A element*/
+color:#fff; }
+
+.nav ul li a:hover{
+/*background of menu items during onmouseover (hover state)*/
+background-color:#118d78;
+-webkit-transition: all 0.3s ease-in-out;
+-moz-transition: all 0.3s ease-in-out;
+-o-transition: all 0.3s ease-in-out;
+-ms-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
+}
+	
+/*1st sub level menu*/
+.nav ul li ul{
+position: absolute; left: 0;
+margin-left:0px; display: none; /*collapse all sub menus to begin with*/
+top:100%;
+}
+
+/*Sub level menu list items (undo style from Top level List Items)*/
+.nav ul li ul li{display: list-item; }
+
+/*All subsequent sub menu levels vertical offset after 1st level sub menu */
+.nav ul li ul li ul{top: 0; }
+
+/* Sub level menu links style */
+.nav ul li ul li a{
+	text-align:left; width: 200px; /*width of sub menus*/
+	padding: 6px; margin:0;
+	font-size:12px;	border-top: 1px solid #333;	background-color:#000;
+}
+
+.nav ul li ul li a:hover{}
+.nav ul li ul li ul li a{ color:#fff; margin-left:2px;}
+
+.nav ul li ul li ul li a:hover{}
+
+/* Holly Hack for IE \*/
+* html .nav{height: 1%;} /*Holly Hack for IE7 and below*/
+
+.nav ul ul ul{ left: 100%; top:0%; }
+.nav ul li:hover > ul 	{ visibility: visible; display:block; }
+
+
+
+.bg{ background-color:rgba(157, 99, 65, 0.5);}

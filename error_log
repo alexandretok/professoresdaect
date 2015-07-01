@@ -1,0 +1,6 @@
+[09-Jul-2014 03:12:05 Europe/Moscow] PHP Fatal error:  Call to undefined method stdClass::save() in /home/alexand2/public_html/professoresdaect.info/protected/controllers/DepoimentoController.php on line 51
+[09-Jul-2014 03:16:33 Europe/Moscow] PHP Fatal error:  Call to undefined method stdClass::save() in /home/alexand2/public_html/professoresdaect.info/protected/controllers/DepoimentoController.php on line 67
+[20-Jul-2014 15:07:44 Europe/Moscow] PHP Fatal error:  Call to undefined method stdClass::save() in /home/alexand2/public_html/professoresdaect.info/protected/controllers/DepoimentoController.php on line 51
+[31-Jul-2014 06:14:13 Europe/Moscow] PHP Fatal error:  Call to undefined method stdClass::save() in /home/alexand2/public_html/professoresdaect.info/protected/controllers/DepoimentoController.php on line 67
+[03-Aug-2014 17:19:31 Europe/Moscow] PHP Fatal error:  Call to undefined method stdClass::save() in /home/alexand2/public_html/professoresdaect.info/protected/controllers/DepoimentoController.php on line 51
+[03-Aug-2014 17:19:47 Europe/Moscow] PHP Fatal error:  Call to undefined method stdClass::save() in /home/alexand2/public_html/professoresdaect.info/protected/controllers/DepoimentoController.php on line 67
