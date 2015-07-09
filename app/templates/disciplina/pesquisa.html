@@ -1,0 +1,18 @@
+<div class="widget-header"> <i class="icon-group"></i>
+	<h3> Professores Encontrados</h3>
+</div>
+
+{% if professores|length == 0 %}
+	<div class='alert'><b><h4>Nenhum professor encontrado.</h4></b></div>
+{% endif %}
+
+{% for professor in professores %}
+	{# index starts in 1 #}
+	{% if loop.index is divisibleby 2 %}	
+		{% include 'professor/pesquisa_view.html' %}
+		</div>	
+	{% else %}
+		<div class="span12">
+		{% include 'professor/pesquisa_view.html' %}
+	{% endif %}
+{% endfor %}

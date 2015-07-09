@@ -1,0 +1,12 @@
+<div class="widget-content span4" style="height: 240px;margin-bottom: 10px">
+	<ul class="messages_layout">
+		<li class="from_user left"> <a class="avatar" href="/professor/{{ professor.friendlyUrl }}"><img style="width: 70px; max-height: 100px" src="/static/img/professores/{% if professor.foto is none %}../semfoto.jpg{% else %}{{ professor.foto }}{% endif %}"></a>
+			<div class="message_wrap"> <span class="arrow"></span>
+				<div class="info"> <a class="name" href="/professor/{{ professor.friendlyUrl }}"> >{{ professor.nome }}</a><br/><span class="time"><i class="icon-star">{{ professor.mediaVotos }}</i></span>
+				</div>
+				<div class="text"> {% if professor.depoimento is none %}<div class='alert'>Nenhum depoimento enviado.</div>" {% else %}{{ professor.depoimento}}{% if professor.tamanho_do_depoimento >= depoimento_max %}...{% endif %}{% endif %}</div>
+			</div>
+			<a class="btn btn-info" href="/professor/{{ professor.friendlyUrl }}">Detalhes</a>
+		</li>
+	</ul>
+</div>

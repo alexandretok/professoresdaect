@@ -1,0 +1,150 @@
+{% extends "main.html" %}
+
+{% block content %}
+<script type="text/javascript">
+function updateResultado(link)
+{
+	$(function(){
+		var lastLength = 0;
+		var lastSearch;
+		var timer;
+		$('.resultado-pesquisa').html('<img style="float: right; margin: 20px 20px 0 0;" src="/static/img/loading.gif" class="loading">');
+				clearTimeout(timer);
+				timer = 0;
+				timer = setTimeout(function(){
+					$.ajax(link, {
+						success: function (data){
+							$('.resultado-pesquisa').html(data);
+						}
+					});
+				}, 500);
+	});
+
+}
+
+	$(function(){
+		var lastLength = 0;
+		var lastSearch;
+		var timer;
+		$('#nome').keyup(function(){
+			if($('#nome').val().length > 2){
+				$('.resultado-pesquisa').html('<img style="float: right; margin: 20px 20px 0 0;" src="/static/img/loading.gif" class="loading">');
+
+				lastLength = $('#nome').val().length;
+				clearTimeout(timer);
+				timer = 0;
+				timer = setTimeout(function(){
+					if($('#nome').val().length == lastLength && lastSearch != $('#nome').val()){
+						lastSearch = $('#nome').val();
+						$.ajax("/professor/pesquisa/search/"+$('#nome').val(), {
+							success: function (data){
+								$('.resultado-pesquisa').html(data);
+							}
+						});
+					}
+				}, 500);
+			}
+		});
+		$('#edit-profile').submit(function(){
+			$('#nome').keyup();
+			return false;
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function(){
+		var lastLength = 0;
+		var lastSearch;
+		var timer;
+		$('#disciplina').keyup(function(){
+			if($('#disciplina').val().length > 2){
+				$('.resultado-pesquisa').html('<img style="float: right; margin: 20px 20px 0 0;" src="/static/img/loading.gif" class="loading">');
+				lastLength = $('#disciplina').val().length;
+				clearTimeout(timer);
+				timer = 0;
+				timer = setTimeout(function(){
+					if($('#disciplina').val().length == lastLength && lastSearch != $('#disciplina').val()){
+						lastSearch = $('#disciplina').val();
+						$.ajax("/disciplina/pesquisa/search/"+$('#disciplina').val(), {
+							success: function (data){
+								var disciplinas = JSON.parse(data);
+
+$( "#disciplina" ).autocomplete({
+      delay: 0,
+      source: disciplinas, 
+      select: function( event, ui )
+      {
+		$.ajax("/disciplina/professores/"+ui.item.id, {
+							success: function (data){
+				$('.resultado-pesquisa').html(data);
+			}
+		});
+	
+      }
+    });
+							}
+						});
+					}
+				}, 500);
+			}
+	});
+		$('#edit-disciplina').submit(function(){
+			$('#disciplina').keyup();
+			return false;
+		});
+});
+</script>
+<div class="row">
+<div class="span6">
+	<div class="widget widget-nopad">
+		<div class="widget-header"> <i class="icon-user"></i>
+			<h3> Pesquisar por professor</h3>
+		</div>
+		<!-- /widget-header -->
+		<div class="widget-content">
+			<form class="form-horizontal" id="edit-profile">
+				<fieldset>
+					<br>
+					<div class="control-group" id="control-group1">
+						<label for="nome" class="control-label">Nome:</label>
+						<div class="controls">
+							<input type="text" autofocus id="nome" name="nome" class="span4">
+						</div> <!-- /controls -->
+					</div> <!-- /control-group -->
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<!-- /widget -->
+</div>
+<div class="span6">
+	<div class="widget widget-nopad">
+		<div class="widget-header"> <i class="icon-user"></i>
+			<h3> Pesquisar por disciplina</h3>
+		</div>
+		<!-- /widget-header -->
+		<div class="widget-content">
+			<form class="form-horizontal" id="edit-disciplina">
+				<fieldset>
+					<br>
+					<div class="control-group">
+						<label for="nome" class="control-label">Nome:</label>
+						<div class="controls">
+							<input type="text" autofocus id="disciplina" name="nome" class="span4">
+						</div> <!-- /controls -->
+					</div> <!-- /control-group -->
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<!-- /widget -->
+</div>
+	</div>
+	<!-- /row -->
+		<div class="row resultado-pesquisa">
+
+			<!-- /widget-content -->
+
+		</div>
+
+{%endblock%}
