@@ -1,7 +1,8 @@
 from app import app
-from app.database import db
-from app.models import Professor, Depoimento, Voto, Leciona, Disciplina 
-from sqlalchemy import func
+from app.database import init_db
+db = init_db()
+from app.models import Professor, Depoimento, Voto, Leciona, Materia, Livro, MateriaELivro, Anuncio
+#from sqlalchemy import func
 from flask import request, session
 import flask as f
 import os
@@ -16,18 +17,18 @@ def shutdown_session(exception=None):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return f.render_template('404.html'), 404
+	return f.render_template('404.html'), 404
 
 @app.errorhandler(405)
 def page_not_found(e):
-    return f.render_template('404.html'), 404
+	return f.render_template('404.html'), 404
 
 
 @app.route("/")
 def index():
 	return f.render_template('index.html')
 
-@app.route("/professor/pesquisa/search/<nome>")
+@app.route("/professor/pesquisa/<nome>")
 def prof_pesquisa(nome):
 	professores = []
 	DEPOIMENTO_MAX = 200
@@ -56,7 +57,7 @@ def prof_info(nome):
 		if prof.getUrlFriendlyName() == nome:
 			break	
 	votos = [v.voto for v in Voto.query.filter_by(professor=prof.id).all()]
-	leciona = [{'nome' : Disciplina.query.filter_by(id=leciona.disciplina).first().nome, 'id' : leciona.disciplina } for leciona in Leciona.query.filter_by(professor=prof.id).all()]
+	leciona = [{'nome' : Materia.query.filter_by(id=leciona.materia).first().nome, 'id' : leciona.materia } for leciona in Leciona.query.filter_by(professor=prof.id).all()]
 	try: 
 		media = sum(votos)/len(votos)
 	except ZeroDivisionError:
@@ -75,18 +76,18 @@ def prof_info(nome):
 	}
 	return f.render_template('professor/view.html', professor=professor) 
 
-@app.route("/disciplina/pesquisa/search/<nome>")
-def disc_pesquisa(nome):
-	disciplinas = '' 
-	for disc in Disciplina.query.filter(Disciplina.nome.ilike("%"+nome+"%")).all():
-		disciplinas += '{ "label" : "'+disc.departamento+str(disc.materia)+' - '+disc.nome+'", "id" : "'+str(disc.id)+'"},'
-	disciplinas= '['+disciplinas[:-1]+']' 
-	return disciplinas
+@app.route("/materia/pesquisa/<nome>")
+def matr_pesquisa(nome):
+	materias = '' 
+	for matr in Materia.query.filter(Materia.nome.ilike("%"+nome+"%")).all():
+		materias += '{ "label" : "'+str(matr)+'", "id" : "'+str(matr.id)+'"},'
+	materias= '['+materias[:-1]+']' 
+	return materias
 
-@app.route("/disciplina/professores/<id>")
-def disc_info(id):
+@app.route("/materia/professores/<id>")
+def matr_info(id):
 	professores = []
-	lecionam = Leciona.query.filter_by(disciplina=id).all()
+	lecionam = Leciona.query.filter_by(materia=id).all()
 	DEPOIMENTO_MAX = 200
 	for leciona in lecionam:
 		prof = Professor.query.filter_by(id=leciona.professor).first()
@@ -115,7 +116,7 @@ def disc_info(id):
 @app.route("/depoimento/novo", methods=['POST'])
 def depoimento_novo():
 	if request.form['url'] is not None:
-		dep = Depoimento(professor=mk_int(request.form['id_professor']), nome=request.form['nome'], depoimento=request.form['depoimento'], disciplina=mk_int(request.form['id_disciplina']))	
+		dep = Depoimento(professor=mk_int(request.form['id_professor']), nome=request.form['nome'], depoimento=request.form['depoimento'], materia=mk_int(request.form['id_materia']))	
 		db.add(dep)
 		db.commit()
 		return f.redirect('/professor/'+request.form['url'], code=303) 
@@ -156,3 +157,48 @@ def depoimento_gostei():
 	else:
 		return f.render_template('404.html'), 404
 
+@app.route("/livro/pesquisa/<nome>")
+def livro_pesquisa(nome):
+	anuncios = []
+	for livr in Livro.query.filter(Livro.titulo.ilike("%"+nome+"%")).all():
+		materia = MateriaELivro.query.join(Materia, Materia.id==MateriaELivro.materia).filter_by(livro=livr.id).first()
+		for anunc in Anuncio.query.filter_by(livro=livr.id).all():
+			anuncios.append({
+				'titulo': livr.titulo, 
+				'autor': livr.autor,
+				'isbn': livr.isbn, 
+				'materia': str(materia), 
+				'anunciante': anunc.anunciante,
+				'anuncio': anunc.anuncio, 
+				'capa': anunc.capa 
+			})
+	return f.render_template('livro/pesquisa.html', anuncios=anuncios)
+
+@app.route("/livro/<nome>")
+def livro_info(nome):
+	for prof in Professor.query.all():
+		if prof.getUrlFriendlyName() == nome:
+			break	
+	votos = [v.voto for v in Voto.query.filter_by(professor=prof.id).all()]
+	leciona = [{'nome' : Materia.query.filter_by(id=leciona.materia).first().nome, 'id' : leciona.materia } for leciona in Leciona.query.filter_by(professor=prof.id).all()]
+	try: 
+		media = sum(votos)/len(votos)
+	except ZeroDivisionError:
+		media = 0
+	depoimentos = [ d for d in Depoimento.query.filter_by(professor=prof.id).order_by(Depoimento.up.desc(),Depoimento.down).all() ]
+ 
+	professor = {
+		'id' : prof.id,
+		'url' : nome,
+		'nome' : prof.nome,
+		'foto' : prof.foto,
+		'votos' : len(votos),
+		'media' : media,
+		'leciona' : leciona, 
+		'depoimentos' : depoimentos
+	}
+	return f.render_template('professor/view.html', professor=professor) 
+
+@app.route("/livro/anunciar")
+def livro_anunc():
+	return f.render_template('livro/anunciar.html')
