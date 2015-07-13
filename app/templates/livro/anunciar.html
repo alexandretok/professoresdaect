@@ -1,0 +1,123 @@
+<script type="text/javascript">
+	$(function () {
+		$('#edit-profile').submit(function(){
+			if($('#depoimento').val().length <= 10){
+				$('#validation').html('Digite no mínimo 10 caracteres!');
+				$('#validation').show();
+
+				return false;
+			}
+		});
+
+
+		$('#anonimo').change(function(){
+			if(typeof $('#anonimo').attr('checked') !== 'undefined'){
+				$('#nome').val('');
+				$('#nome').attr('disabled', 'disabled');
+			}else{
+				$('#nome').removeAttr('disabled');
+			}
+		});
+
+	});
+</script>
+<div class="span6">
+	<div class="widget">
+		<div class="widget-header"><i class="icon-pencil"></i>
+
+			<h3>Anunciar Livro</h3>
+		</div>
+		<!-- /widget-header -->
+		<div class="widget-content">
+			<form method="post" class="form-horizontal" id="edit-profile" action="/depoimento/novo">
+	
+				<fieldset>
+
+					<div class="control-group">
+						<label for="nome" class="control-label">Nome:</label>
+
+						<div class="controls">
+							<input type="input" name="nome" id="nome" class="span2">
+							<label class="checkbox inline">
+								<input type="checkbox" id="anonimo"> Anônimo
+							</label>
+						</div>
+						<!-- /controls -->
+					</div>
+					<div class="control-group">
+						<label for="id_disciplina" class="control-label">Livro:</label>
+
+						<div class="controls">
+							<select id="id_disciplina" name="id_disciplina" class="span3">
+								<option value="">Não desejo informar</option>
+								<option value='1'>bar</option>
+							</select> &nbsp;&nbsp;<a href="javascript:$('#adicionar-livro').css('display', 'block');">Outro</a>
+						</div> 
+						<!-- /controls -->
+					</div>
+					<div class="control-group">
+						<label for="depoimento" class="control-label">Anúncio:</label>
+
+						<div class="controls">
+							<textarea name="depoimento" id="depoimento" class="span3"
+								   rows="5"></textarea>
+						</div>
+					</div>
+					<div class="alert" id="validation" style="display: none;"></div>
+					<!-- /control-group -->
+					<div class="form-actions" style="background-color: inherit;border-top: 0px">
+						<button class="btn btn-primary" type="submit">Enviar Depoimento</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<!-- /widget-content -->
+
+	</div>
+	<!-- /widget -->
+</div>
+<div class="span5" id="adicionar-livro" style="display:none;">
+	<div class="widget">
+		<div class="widget-header"><i class="icon-pencil"></i>
+
+			<h3>Adicionar Livro</h3>
+		</div>
+		<!-- /widget-header -->
+		<div class="widget-content">
+			<form method="post" class="form-horizontal" id="edit-profile" action="/depoimento/novo">
+	
+				<fieldset>
+
+					<div class="control-group">
+						<label for="nome" class="control-label">Título</label>
+						<div class="controls">
+							<input type="input" name="nome" id="titulo" class="span2">
+						</div>
+						<!-- /controls -->
+					</div>
+					<div class="control-group">
+						<label for="nome" class="control-label">Autor</label>
+						<div class="controls">
+							<input type="input" name="nome" id="titulo" class="span2">
+						</div>
+						<!-- /controls -->
+					</div>
+					<div class="control-group">
+						<label for="nome" class="control-label">ISBN</label>
+						<div class="controls">
+							<input type="input" name="nome" id="titulo" class="span2">
+						</div>
+						<!-- /controls -->
+					</div>
+					<div class="form-actions" style="background-color: inherit;border-top: 0px">
+						<button class="btn btn-primary" type="submit">Adicionar</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<!-- /widget-content -->
+
+	</div>
+	<!-- /widget -->
+</div>
+

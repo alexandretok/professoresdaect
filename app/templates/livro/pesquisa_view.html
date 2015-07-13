@@ -1,0 +1,12 @@
+<div class="widget-content span4" style="height: 240px;margin-bottom: 10px">
+	<ul class="messages_layout">
+		<li class="from_user left"> <a class="avatar" href="/livro/{{ anuncio.friendlyUrl }}"><img style="width: 70px; max-height: 100px" src="/static/img/capas/{% if anuncio.capa is none %}../semcapa.jpg{% else %}{{ anuncio.capa }}{% endif %}"></a>
+			<div class="message_wrap"> <span class="arrow"></span>
+				<div class="info"> <a class="name" href="/livro/{{ anuncio.friendlyUrl }}"> >{{ anuncio.titulo }}</a><br/><span class="time"><i class="icon-star"></i></span>
+				</div>
+				<div class="text">{{anuncio.anuncio}}</div>
+			</div>
+			<a class="btn btn-info" href="/livro/{{ livro.friendlyUrl }}">Detalhes</a>
+		</li>
+	</ul>
+</div>
