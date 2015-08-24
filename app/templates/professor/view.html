@@ -207,13 +207,14 @@
 			<ul class="messages_layout">
 				{% for depoimento in professor.depoimentos %}
 				<li>
-					<div class="message_wrap"> <span class="arrow"></span>
+					<div class="message_wrap span10"> <span class="arrow"></span>
 						<div class="info"> <a class="name"><b>Enviado por: {{ depoimento.nome }}</a> <span class="time" style="margin-left: 20px;font-size: 13px;"> Disciplina: {% if depoimento.disciplina is none %}Não informada{% else %} {{ depoimento.disciplina }} {% endif %}</span></b>
 						</div>
 						<div class="text" style="margin-bottom: 20px;"> {{ depoimento.depoimento }} </div>
 						<div>
 							<a class="gostei" id="g{{ depoimento.id }}" style="color: #0f9b00; margin-right: 40px;" href="#"><i class=" icon-thumbs-up icon-large"></i> Concordo! (<span id="qtdg{{ depoimento.id }}">{{ depoimento.up }}</span>)</a>
-							<a class="naogostei" id="n{{ depoimento.id }}" style="color: #b50000;" href="#"><i class=" icon-thumbs-down icon-large"></i> Discordo! (<span id="qtdn{{ depoimento.id }}">{{ depoimento.down }}</span>)</a>
+							<a class="naogostei" id="n{{ depoimento.id }}" style="color: #b50000; margin-right: 40px" href="#"><i class=" icon-thumbs-down icon-large"></i> Discordo! (<span id="qtdn{{ depoimento.id }}">{{ depoimento.down }}</span>)</a>
+							<a class="naogostei" id="n{{ depoimento.id }}" style="color: #b50000;" href="#">Denunciar! </a>
 							<span id="jaOpinou{{ depoimento.id }}" style="margin-left: 40px; display: none;" class="alert">Você já deu sua opinião sobre esse depoimento.</span>
 						</div>
 

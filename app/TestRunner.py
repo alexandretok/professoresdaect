@@ -247,7 +247,7 @@ class _TestResult(TestResult):
             sys.stderr.write(str(test))
             sys.stderr.write('\n')
         else:
-            sys.stderr.write('.')
+            pass #sys.stderr.write('.')
 
     def addError(self, test, err):
         self.error_count += 1
@@ -260,7 +260,7 @@ class _TestResult(TestResult):
             sys.stderr.write(str(test))
             sys.stderr.write('\n')
         else:
-            sys.stderr.write('E')
+            pass #sys.stderr.write('E')
 
     def addFailure(self, test, err):
         self.failure_count += 1
@@ -273,7 +273,7 @@ class _TestResult(TestResult):
             sys.stderr.write(str(test))
             sys.stderr.write('\n')
         else:
-            sys.stderr.write('F')
+            pass #sys.stderr.write('F')
 
 
 class TestRunner(Template_mixin):
