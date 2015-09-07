@@ -153,7 +153,7 @@
 						<label for="nome" class="control-label">Nome:</label>
 
 						<div class="controls">
-							<input type="input" name="nome" id="nome" class="span2">
+							<input type="input" name="nome" id="nome" class="span2" value="">
 							<label class="checkbox inline">
 								<input type="checkbox" id="anonimo"> Anônimo
 							</label>
@@ -161,10 +161,10 @@
 						<!-- /controls -->
 					</div>
 					<div class="control-group">
-						<label for="id_disciplina" class="control-label">Disciplina que cursou:</label>
+						<label for="id_materia" class="control-label">Disciplina que cursou:</label>
 
 						<div class="controls">
-							<select id="id_disciplina" name="id_disciplina" class="span3">
+							<select id="id_materia" name="id_materia" class="span3">
 								<option value="">Não desejo informar</option>
 								{% for materia in professor.leciona %}
 								<option value='{{ materia.id }}'>{{ materia.nome }}</option>

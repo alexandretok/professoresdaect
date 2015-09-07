@@ -14,6 +14,8 @@ def init_db(schema="professores_da_ect"):
 	Base.query = db.query_property()
 	return db
 
+db = init_db()
+
 #def init_db():
     # import all modules here that might define models so that
     # they will be registered properly on the metadata.  Otherwise

@@ -12,10 +12,10 @@ class Professor(Base):
     foto = Column(String(100))
 
     def __repr__(self):
-	return "<Professor " +self.nome.encode('utf-8')+">"
+        return "<Professor " +self.nome.encode('utf-8')+">"
 
     def getUrlFriendlyName(self):
-    	return unidecode(self.nome).replace(" ", "-").lower()
+        return unidecode(self.nome).replace(" ", "-").lower()
 
 class Materia(Base):
     __tablename__ = 'materias'
@@ -26,10 +26,10 @@ class Materia(Base):
     nome = Column(Unicode(100))
 
     def __repr__(self):
-	return self.departamento.encode('utf-8')+str(self.codigo)+" - "+self.nome.encode('utf-8')
+        return self.departamento.encode('utf-8')+str(self.codigo)+" - "+self.nome.encode('utf-8')
 
     def getUrlFriendlyName(self):
-    	return unidecode(self.nome).replace(" ", "-").lower()
+        return unidecode(self.nome).replace(" ", "-").lower()
 
 class Depoimento(Base):
     __tablename__ = 'depoimentos'
@@ -44,7 +44,7 @@ class Depoimento(Base):
     down = Column(Integer, default=0)
 
     def __repr__(self):
-	return "<Depoimento " +self.depoimento.encode('utf-8')+">"
+        return "<Depoimento " +self.depoimento.encode('utf-8')+">"
 
 class Leciona(Base):
     __tablename__ = 'leciona'
@@ -53,7 +53,7 @@ class Leciona(Base):
     materia = Column(Integer, ForeignKey('materias.id'), primary_key=True)
 
     def __repr__(self):
-	return "<Professor " +str(self.professor)+" leciona "+str(self.materia)+">"
+        return "<Professor " +str(self.professor)+" leciona "+str(self.materia)+">"
 
 class Voto(Base):
     __tablename__ = 'votos'
@@ -64,7 +64,7 @@ class Voto(Base):
     ip = Column(String(45))
 
     def __repr__(self):
-	return "<Voto " +self.voto+">"
+        return "<Voto " +self.voto+">"
 
 class Livro(Base):
     __tablename__ = 'livros'
@@ -75,7 +75,7 @@ class Livro(Base):
     isbn = Column(Integer)
 
     def __repr__(self):
-	return "<Livro " +self.titulo+">"
+        return "<Livro " +self.titulo+">"
 
 class MateriaELivro(Base):
     __tablename__ = 'materias_e_livros'
@@ -84,7 +84,7 @@ class MateriaELivro(Base):
     livro = Column(Integer, ForeignKey('livros.id'), primary_key=True)
 
     def __repr__(self):
-	return "<Livro de ID " +self.livro+" usado na materia de ID "+self.materia+">"
+        return "<Livro de ID " +self.livro+" usado na materia de ID "+self.materia+">"
 
 class Anuncio(Base):
     __tablename__ = 'anuncios'
@@ -97,4 +97,4 @@ class Anuncio(Base):
 
 
     def __repr__(self):
-	return "<"+self.autor+" anunciou o livro de id "+self.livro+" com a seguinte mensagem: "+anuncio+">"
+        return "<"+self.autor+" anunciou o livro de id "+self.livro+" com a seguinte mensagem: "+anuncio+">"

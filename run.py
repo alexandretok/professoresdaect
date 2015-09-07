@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/local/bin/python3.4
 from app import app
 from flask.ext.session import Session
 
