@@ -22,7 +22,10 @@ By the way, HTMLTestRunner's license does not cover forking, given that I remove
 HTMLTestRunner's author is Wai Yip Tung and I am grateful for his contribution.
 """
 import datetime
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import sys
 import re
 import time
@@ -58,89 +61,89 @@ stdout_redirector = OutputRedirector(sys.stdout)
 stderr_redirector = OutputRedirector(sys.stderr)
 
 class Table(object):
-		
-	def __init__(self, padding='', allow_newlines=False):	
-		self.__columnSize__ =  []
-		self.__rows__ = []
-		self.__titles__ = None 
-		self.padding = padding
-		self.allow_newlines=allow_newlines
+        
+    def __init__(self, padding='', allow_newlines=False):   
+        self.__columnSize__ =  []
+        self.__rows__ = []
+        self.__titles__ = None 
+        self.padding = padding
+        self.allow_newlines=allow_newlines
 
-	def __len__(self, x):
-		return len(re.sub("\033\[[0-9];[0-9];[0-9]{1,2}m", "", x))
+    def __len__(self, x):
+        return len(re.sub("\033\[[0-9];[0-9];[0-9]{1,2}m", "", x))
 
-	def addRow(self, row):
-		rows = [[''] for l in range(len(row))]
-		maxrows = 1 
-		for i, x in enumerate(row):
-			for j, y in enumerate(x.split("\n")):
-				if len(y) == 0 and self.allow_newlines == False: 
-					continue
-				try:
-					self.__columnSize__[i] = max(self.__columnSize__[i], self.__len__(y))
-				except IndexError:
-					self.__columnSize__.append(self.__len__(y))
-				rows[i].append(y)
-				maxrows= max(j, maxrows)
-		for i in range(len(rows)):
-			rows[i] += (maxrows-(len(rows[i])-1))*['']
-		for i in range(maxrows):
-			self.__rows__.append([rows[j][i+1] for j in range(len(row))])
+    def addRow(self, row):
+        rows = [[''] for l in range(len(row))]
+        maxrows = 1 
+        for i, x in enumerate(row):
+            for j, y in enumerate(x.split("\n")):
+                if len(y) == 0 and self.allow_newlines == False: 
+                    continue
+                try:
+                    self.__columnSize__[i] = max(self.__columnSize__[i], self.__len__(y))
+                except IndexError:
+                    self.__columnSize__.append(self.__len__(y))
+                rows[i].append(y)
+                maxrows= max(j, maxrows)
+        for i in range(len(rows)):
+            rows[i] += (maxrows-(len(rows[i])-1))*['']
+        for i in range(maxrows):
+            self.__rows__.append([rows[j][i+1] for j in range(len(row))])
 
-	def addTitles(self, titles):
-		for i, x in enumerate(titles):
-			try:
-				self.__columnSize__[i] = max(self.__columnSize__[i], self.__len__(x))
-			except IndexError:
-				self.__columnSize__.append(self.__len__(x))
-		self.__titles__ = titles
+    def addTitles(self, titles):
+        for i, x in enumerate(titles):
+            try:
+                self.__columnSize__[i] = max(self.__columnSize__[i], self.__len__(x))
+            except IndexError:
+                self.__columnSize__.append(self.__len__(x))
+        self.__titles__ = titles
 
-	def __repr__(self):
-		hline = self.padding+"+"
-		for x in self.__columnSize__:
-			hline += (x+2)*'-'+'+'
-		rows = []
-		if self.__titles__ is None:
-			title = ""
-		else:
-			if len(self.__titles__) < len(self.__columnSize__):
-				self.__titles__ += ((len(self.__columnSize__)-len(self.__titles__))*[''])
-			for i, x in enumerate(self.__titles__):
-				self.__titles__[i] = x.center(self.__columnSize__[i]) 
-			title = self.padding+"| "+" | ".join(self.__titles__)+" |\n"+hline+"\n"
-		for x in self.__rows__:
-			if len(x) < len(self.__columnSize__):
-				x += ((len(self.__columnSize__)-len(x))*[''])
-			for i, c in enumerate(x):
-				x[i] = c.ljust(self.__columnSize__[i])+(len(c)-self.__len__(c)-3)*' '
-			rows.append(self.padding+"| "+" | ".join(x)+" |")
-		return hline+"\n"+title+"\n".join(rows)+"\n"+hline+"\n"
+    def __repr__(self):
+        hline = self.padding+"+"
+        for x in self.__columnSize__:
+            hline += (x+2)*'-'+'+'
+        rows = []
+        if self.__titles__ is None:
+            title = ""
+        else:
+            if len(self.__titles__) < len(self.__columnSize__):
+                self.__titles__ += ((len(self.__columnSize__)-len(self.__titles__))*[''])
+            for i, x in enumerate(self.__titles__):
+                self.__titles__[i] = x.center(self.__columnSize__[i]) 
+            title = self.padding+"| "+" | ".join(self.__titles__)+" |\n"+hline+"\n"
+        for x in self.__rows__:
+            if len(x) < len(self.__columnSize__):
+                x += ((len(self.__columnSize__)-len(x))*[''])
+            for i, c in enumerate(x):
+                x[i] = c.ljust(self.__columnSize__[i])+(len(c)-self.__len__(c)-3)*' '
+            rows.append(self.padding+"| "+" | ".join(x)+" |")
+        return hline+"\n"+title+"\n".join(rows)+"\n"+hline+"\n"
 
 class bcolors(object):
-	FORMAT = {
-		'Regular' : '0',
-		'Bold' : '1',
-		'Underline' : '4', 
-		'High Intensity' : '0', # +60 on color 
-		'BoldHighIntensity' : '1',  # +60 on color
-	}
-	START = "\033["
-	COLOR = {
-		'black' : "0;30m",
-		'red' : "0;31m",
-		'green' : "0;32m",
-		'yellow' : "0;33m",
-		'blue' : "0;34m",
-		'purple' : "0;35m",
-		'cyan' : "0;36m",
-		'white' : "0;37m",
-		'end' : "0m",
-	}
+    FORMAT = {
+        'Regular' : '0',
+        'Bold' : '1',
+        'Underline' : '4', 
+        'High Intensity' : '0', # +60 on color 
+        'BoldHighIntensity' : '1',  # +60 on color
+    }
+    START = "\033["
+    COLOR = {
+        'black' : "0;30m",
+        'red' : "0;31m",
+        'green' : "0;32m",
+        'yellow' : "0;33m",
+        'blue' : "0;34m",
+        'purple' : "0;35m",
+        'cyan' : "0;36m",
+        'white' : "0;37m",
+        'end' : "0m",
+    }
 
-	def __getattr__(self, name):
-		def handlerFunction(*args, **kwargs):
-			return self.START+self.FORMAT['Regular']+";"+self.COLOR[name.lower()]
-		return handlerFunction(name=name) 
+    def __getattr__(self, name):
+        def handlerFunction(*args, **kwargs):
+            return self.START+self.FORMAT['Regular']+";"+self.COLOR[name.lower()]
+        return handlerFunction(name=name) 
 # ----------------------------------------------------------------------
 # Template
 
@@ -148,9 +151,9 @@ class Template_mixin(object):
     bc = bcolors()
 
     STATUS = {
-	    0: bc.GREEN+'pass'+bc.END,
-	    1: bc.PURPLE+'fail'+bc.END,
-	    2: bc.RED+'error'+bc.END,
+        0: bc.GREEN+'pass'+bc.END,
+        1: bc.PURPLE+'fail'+bc.END,
+        2: bc.RED+'error'+bc.END,
     }
 
     # ------------------------------------------------------------------------
@@ -208,7 +211,7 @@ class _TestResult(TestResult):
     def startTest(self, test):
         TestResult.startTest(self, test)
         # just one buffer for both stdout and stderr
-        self.outputBuffer = StringIO.StringIO()
+        self.outputBuffer = StringIO()
         stdout_redirector.fp = self.outputBuffer
         stderr_redirector.fp = self.outputBuffer
         self.stdout0 = sys.stdout
@@ -292,7 +295,7 @@ class TestRunner(Template_mixin):
             self.description = description
 
         self.startTime = datetime.datetime.now()
-	self.bc = bcolors()
+        self.bc = bcolors()
 
 
 
@@ -313,7 +316,7 @@ class TestRunner(Template_mixin):
         classes = []
         for n,test,output,error in result_list:
             testClass = test.__class__
-            if not rmap.has_key(testClass):
+            if testClass not in rmap:
                 rmap[testClass] = []
                 classes.append(testClass)
             rmap[testClass].append((n,test,output,error))
@@ -329,10 +332,13 @@ class TestRunner(Template_mixin):
         startTime = str(self.startTime)[:19]
         duration = str(self.stopTime - self.startTime)
         status = []
-	padding = 4*' '
-        if result.success_count: status.append(padding+self.bc.GREEN+'Pass:'+self.bc.END+' %s\n'    % result.success_count)
-        if result.failure_count: status.append(padding+self.bc.PURPLE+'Failure:'+self.bc.END+' %s\n' % result.failure_count)
-        if result.error_count:   status.append(padding+self.bc.RED+'Error:'+self.bc.END+' %s\n'   % result.error_count  )
+        padding = 4*' '
+        if result.success_count:
+            status.append(padding+self.bc.GREEN+'Pass:'+self.bc.END+' %s\n'    % result.success_count)
+        if result.failure_count:
+            status.append(padding+self.bc.PURPLE+'Failure:'+self.bc.END+' %s\n' % result.failure_count)
+        if result.error_count:
+            status.append(padding+self.bc.RED+'Error:'+self.bc.END+' %s\n'   % result.error_count  )
         if status:
             status = '\n'+''.join(status)
         else:
@@ -349,31 +355,34 @@ class TestRunner(Template_mixin):
         heading = self._generate_heading(report_attrs)
         report = self._generate_report(result)
         output = self.title.rjust(30) +"\n" + \
-		heading + \
-		report
-        self.stream.write(output.encode('utf8'))
+        heading + \
+        report
+        try:
+            self.stream.write(output.encode('utf8'))
+        except TypeError:
+            self.stream.write(output)
 
     def _generate_heading(self, report_attrs):
-	a_lines = []
+        a_lines = []
         for name, value in report_attrs:
             line = self.bc.CYAN+name+": "+self.bc.END+value+"\n"
-	    a_lines.append(line)
+        a_lines.append(line)
         heading = ''.join(a_lines)+ \
-		self.bc.CYAN+"Description:"+self.bc.END+self.description+"\n"
-	return heading
+        self.bc.CYAN+"Description:"+self.bc.END+self.description+"\n"
+        return heading
 
 
     def _generate_report(self, result):
         rows = []
         sortedResult = self.sortResult(result.result)
-	padding = 4 * ' '
+        padding = 4 * ' '
         table = Table(padding=padding)
-	table.addTitles(["Test group/Test case", "Count", "Pass", "Fail", "Error"])
-       	tests = '' 
-	for cid, (testClass, classResults) in enumerate(sortedResult): # Iterate over the test cases
-	    classTable = Table(padding=2*padding)
-	    classTable.addTitles(["Test name", "Stack", "Status"])
-	    # subtotal for a class
+        table.addTitles(["Test group/Test case", "Count", "Pass", "Fail", "Error"])
+        tests = '' 
+        for cid, (testClass, classResults) in enumerate(sortedResult): # Iterate over the test cases
+            classTable = Table(padding=2*padding)
+            classTable.addTitles(["Test name", "Stack", "Status"])
+            # subtotal for a class
             np = nf = ne = 0
             for n,t,o,e in classResults:
                 if n == 0: np += 1
@@ -385,7 +394,7 @@ class TestRunner(Template_mixin):
                 name = testClass.__name__
             else:
                 name = "%s.%s" % (testClass.__module__, testClass.__name__)
-	    tests += padding + name + "\n"
+            tests += padding + name + "\n"
             doc = testClass.__doc__ and testClass.__doc__.split("\n")[0] or ""
             desc = doc and '%s: %s' % (name, doc) or name
             # style = ne > 0 and 'errorClass' or nf > 0 and 'failClass' or 'passClass',
@@ -393,10 +402,10 @@ class TestRunner(Template_mixin):
             table.addRow([desc, str(np+nf+ne), str(np), str(nf), str(ne)])
             for tid, (n,test,output,error) in enumerate(classResults): # Iterate over the unit tests
                 classTable.addRow(self._generate_report_test(cid, tid, n, test, output, error))
-	    tests += str(classTable)
-	table.addRow(["Total", str(result.success_count+result.failure_count+result.error_count), str(result.success_count), str(result.failure_count), str(result.error_count)])	
-	report = self.bc.CYAN+"Summary: "+self.bc.END+"\n"+str(table)+tests
-	return report
+            tests += str(classTable)
+        table.addRow(["Total", str(result.success_count+result.failure_count+result.error_count), str(result.success_count), str(result.failure_count), str(result.error_count)])   
+        report = self.bc.CYAN+"Summary: "+self.bc.END+"\n"+str(table)+tests
+        return report
 
 
     def _generate_report_test(self, cid, tid, n, test, output, error):
@@ -411,20 +420,26 @@ class TestRunner(Template_mixin):
         if isinstance(output,str):
             # TODO: some problem with 'string_escape': it escape \n and mess up formating
             # uo = unicode(o.encode('string_escape'))
-            uo = output.decode('latin-1')
+            try:
+                uo = output.decode('latin-1')
+            except AttributeError:
+                uo = output
         else:
             uo = output
         if isinstance(error,str):
             # TODO: some problem with 'string_escape': it escape \n and mess up formating
             # ue = unicode(e.encode('string_escape'))
-            ue = error.decode('latin-1')
+            try:
+                ue = error.decode('latin-1')
+            except AttributeError:
+                ue = error 
         else:
             ue = error
 
         script = self.REPORT_TEST_OUTPUT_TMPL % dict(
             output = uo+ue,
         )
-	row = [desc, script, self.STATUS[n]]
+        row = [desc, script, self.STATUS[n]]
         #row = tmpl % dict(
         #    tid = tid,
         #    desc = desc,
